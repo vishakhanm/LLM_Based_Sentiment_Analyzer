@@ -3,7 +3,7 @@
 # =========================
 
 # Path to fine-tuned HuggingFace model
-FINETUNED_MODEL_PATH = "./distilbert_goemotions"
+FINETUNED_MODEL_PATH = "vishakhanm/distilbert-goemotions-distress"
 
 # Max sequence length for tokenizer
 MAX_SEQ_LENGTH = 128
@@ -36,15 +36,15 @@ SEVERITY_ACTIVATION_THRESHOLD = 0.05
 
 # Emotion → severity weight mapping
 EMOTION_WEIGHTS = {
-    "grief": 1.0,
-    "fear": 0.9,
-    "anger": 0.85,
-    "remorse": 0.8,
-    "disgust": 0.75,
-    "sadness": 0.7,
-    "nervousness": 0.65,
-    "disappointment": 0.6,
-    "embarrassment": 0.55,
-    "disapproval": 0.4,
-    "annoyance": 0.3,
+    "LABEL_16": 1.0, #grief
+    "LABEL_14": 0.9, #fear
+    "LABEL_2": 0.85, #anger
+    "LABEL_24": 0.8, #remorse
+    "LABEL_11": 0.75, #disgust
+    "LABEL_25": 0.7, #sadness
+    "LABEL_19": 0.65, #nervousness
+    "LABEL_9": 0.6, #disappointment
+    "LABEL_12": 0.55, #embarrassment
+    "LABEL_10": 0.4, #disapproval
+    "LABEL_3": 0.3, #annoyance
 }

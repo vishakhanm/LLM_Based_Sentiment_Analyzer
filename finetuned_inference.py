@@ -22,9 +22,15 @@ emotion_labels = model.config.id2label.values()
 weights = np.array([EMOTION_WEIGHTS.get(lab, 0.0) for lab in emotion_labels])
 max_weight = max(weights.max(), 1e-6)
 
+def activate(prob, t):
+  # Soft activation of probabilities
+  if prob <= t:
+      return 0.0
+  return (prob - t) / (1.0 - t)
+
 def compute_severity(probs):
     t = SEVERITY_ACTIVATION_THRESHOLD
-    activated = np.where(probs > t, (probs - t) / (1 - t), 0.0)
+    activated = np.array([activate(p, t) for p in probs])
     score = (activated * weights).sum() / max_weight
     return float(np.clip(score, 0.0, 1.0))
 
