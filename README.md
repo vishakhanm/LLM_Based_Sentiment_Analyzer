@@ -1,18 +1,27 @@
 # Emotional Distress Severity Scoring Demo
 
-This project provides a **Streamlit-based demo** for scoring the **emotional distress severity** of social media posts or text feeds on a continuous scale from **0 to 1**.
+Emotional distress detection is important for content moderation and safety-aware recommendation systems. This project provides a **Streamlit-based demo** for scoring the **emotional distress severity** of social media posts or text feeds on a continuous scale from **0 to 1**. The system supports **feed-level emotional distress analysis** when multiple posts are provided as input.
 
-The demo allows users to compare:
-- **LLM Prompting** (API-based inference)
-- **Fine-tuned Transformer Model** (hosted on Hugging Face)
+## Feed Aggregation Logic
 
-The system supports **single posts or multiple newline-separated feeds** and outputs a severity score for each post.
+When the user inputs multiple newline-separated posts:
+1. Each post is scored individually for emotional distress (∈ [0, 1]).
+2. Individual post scores are aggregated into a single **feed severity score** using a configurable strategy:
+   - `mean`: Average severity across all posts
+   - `max`: Maximum severity among posts
+   - `top_k_mean`: Mean of the top-k most severe posts
+
+Aggregation behavior is configurable via constants.
+
+## Threshold-Based Risk Flagging
+
+After aggregation:
+- The feed is **flagged** if the aggregated severity score exceeds a predefined threshold.
+- This enables identification of **high-risk feeds** even when individual posts may vary in severity.
 
 ---
 
-## 🔍 Project Overview
-
-Emotional distress detection is important for content moderation and safety-aware recommendation systems.  
+## Approach
 This project explores two approaches:
 
 1. **LLM Prompting**  
@@ -20,10 +29,6 @@ This project explores two approaches:
 
 2. **Fine-tuned Model**  
    A DistilBERT model fine-tuned on the **GoEmotions** dataset, with a custom aggregation scheme to map multi-label emotion predictions to a single severity score.
-
-The Streamlit app provides a simple interface to compare these approaches interactively.
-
----
 
 ## 🧠 Models Used
 
@@ -49,6 +54,7 @@ The Streamlit app provides a simple interface to compare these approaches intera
   - Multiple posts (one per line)
 - Output:
   - Per-post emotional distress severity score
+  - Feed level emotional distress severity score
 - Graceful handling of API rate limits for LLM inference
 
 ---
@@ -70,6 +76,9 @@ pip install -r requirements.txt
 ### Edit constants.py
 ```
 GROQ_API_KEY = "YOUR_GROQ_API_KEY"
+FEED_SEVERITY_METHOD = "mean"   # mean | max | top_k_mean
+FEED_TOP_K_RATIO = 0.2          # used if method = top_k_mean
+FEED_SEVERITY_THRESHOLD = 0.6   # flagging threshold
 ```
 
 ### Run the app

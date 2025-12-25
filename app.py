@@ -1,6 +1,7 @@
 import streamlit as st
 from llm_inference import llm_score_batch
 from finetuned_inference import finetuned_score_batch
+from utilities import aggregate_feed_severity
 
 st.set_page_config(page_title="Distress Severity Demo", layout="centered")
 
@@ -36,10 +37,19 @@ if st.button("Run Model"):
             else:
                 scores = finetuned_score_batch(posts)
 
-        st.success("Done!")
+        # st.success("Done!")
+        feed_severity, is_flagged = aggregate_feed_severity(scores)
 
         # --- Output ---
-        st.subheader("Results")
+        st.subheader("Feed-Level Result")
+        st.markdown(f"**Feed Severity Score:** `{feed_severity:.3f}`")
+
+        if is_flagged:
+            st.error("⚠️ High distress feed detected (above threshold).")
+        else:
+            st.success("✅ Feed distress level is within acceptable range.")
+            
+        st.subheader("Post-wise severity")
         for post, score in zip(posts, scores):
             st.markdown(f"**Post:** {post}")
             st.markdown(f"**Severity Score:** `{score:.3f}`")

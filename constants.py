@@ -48,3 +48,10 @@ EMOTION_WEIGHTS = {
     "LABEL_10": 0.4, #disapproval
     "LABEL_3": 0.3, #annoyance
 }
+
+# Feed-level aggregation
+FEED_SEVERITY_METHOD = "top_k_mean"   # options: "mean", "max", "top_k_mean"
+FEED_TOP_K_RATIO = 0.4          # used only if method = "top_k_mean"
+
+# Risk flag threshold
+FEED_SEVERITY_THRESHOLD = 0.6
